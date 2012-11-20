@@ -1,0 +1,18 @@
+InfinityCore DB is a World of Warcraft Mists of Pandaria MySQL Database.
+
+This being said, This database is actually SkyFireDB for 4.0.6a. I have
+modified it to work with TrinityCore's 4.3.4 branch. As I work on the core
+to make it work with 5.0.5b (16135) I will be modifying the Database, and 
+updating it here.
+
+I never do any work without sharing. You may find this useful, but I do not
+guarantee it will work, and it is by no means "Blizzlike". Eventually someone
+(probably the devs at TrinityCore... http://www.trinitycore.org) will make
+a good working 5.0.5 Database... or maybe not. Blizzard updates so often,
+it is hard to keep up.
+
+To see progress of this database, and InfinityCore, check out:
+
+http://www.realmsofwarcraft.com
+and
+http://www.realmsofwarcraft.us
