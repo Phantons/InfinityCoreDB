@@ -1,3 +1,18 @@
+/*
+SQLyog Enterprise - MySQL GUI v8.18 
+MySQL - 5.5.30-1~dotdeb.0 : Database - auth
+*********************************************************************
+*/
+
+
+/*!40101 SET NAMES utf8 */;
+
+/*!40101 SET SQL_MODE=''*/;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 /*Table structure for table `account` */
 
 DROP TABLE IF EXISTS `account`;
@@ -70,6 +85,69 @@ CREATE TABLE `account_friends` (
   PRIMARY KEY (`id`,`friend_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 PACK_KEYS=0 COMMENT='Stores accounts for Refer-a-Friend System.';
 
+/*Table structure for table `account_premium` */
+
+DROP TABLE IF EXISTS `account_premium`;
+
+CREATE TABLE `account_premium` (
+  `id` int(11) NOT NULL DEFAULT '0' COMMENT 'Account id',
+  `setdate` bigint(40) NOT NULL DEFAULT '0',
+  `unsetdate` bigint(40) NOT NULL DEFAULT '0',
+  `premium_type` tinyint(4) unsigned NOT NULL DEFAULT '1',
+  `active` tinyint(4) NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`,`setdate`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=DYNAMIC COMMENT='Premium Accounts';
+
+/*Table structure for table `ajax_chat_bans` */
+
+DROP TABLE IF EXISTS `ajax_chat_bans`;
+
+CREATE TABLE `ajax_chat_bans` (
+  `userID` int(11) NOT NULL,
+  `userName` varchar(64) COLLATE utf8_bin NOT NULL,
+  `dateTime` datetime NOT NULL,
+  `ip` varbinary(16) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+/*Table structure for table `ajax_chat_invitations` */
+
+DROP TABLE IF EXISTS `ajax_chat_invitations`;
+
+CREATE TABLE `ajax_chat_invitations` (
+  `userID` int(11) NOT NULL,
+  `channel` int(11) NOT NULL,
+  `dateTime` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+/*Table structure for table `ajax_chat_messages` */
+
+DROP TABLE IF EXISTS `ajax_chat_messages`;
+
+CREATE TABLE `ajax_chat_messages` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userID` int(11) NOT NULL,
+  `userName` varchar(64) COLLATE utf8_bin NOT NULL,
+  `userRole` int(1) NOT NULL,
+  `channel` int(11) NOT NULL,
+  `dateTime` datetime NOT NULL,
+  `ip` varbinary(16) NOT NULL,
+  `text` text COLLATE utf8_bin,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+/*Table structure for table `ajax_chat_online` */
+
+DROP TABLE IF EXISTS `ajax_chat_online`;
+
+CREATE TABLE `ajax_chat_online` (
+  `userID` int(11) NOT NULL,
+  `userName` varchar(64) COLLATE utf8_bin NOT NULL,
+  `userRole` int(1) NOT NULL,
+  `channel` int(11) NOT NULL,
+  `dateTime` datetime NOT NULL,
+  `ip` varbinary(16) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
 /*Table structure for table `ip_banned` */
 
 DROP TABLE IF EXISTS `ip_banned`;
@@ -95,6 +173,34 @@ CREATE TABLE `logs` (
   `string` text CHARACTER SET latin1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+/*Table structure for table `mangchat` */
+
+DROP TABLE IF EXISTS `mangchat`;
+
+CREATE TABLE `mangchat` (
+  `id` int(11) unsigned NOT NULL DEFAULT '0',
+  `host` text,
+  `port` int(11) NOT NULL DEFAULT '0',
+  `user` text,
+  `pass` text,
+  `nick` text,
+  `auth` tinyint(3) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/*Table structure for table `mangchat_links` */
+
+DROP TABLE IF EXISTS `mangchat_links`;
+
+CREATE TABLE `mangchat_links` (
+  `mangchat_id` int(11) unsigned NOT NULL DEFAULT '0',
+  `wow_channel` varchar(255) NOT NULL DEFAULT '',
+  `wow_channel_options` int(11) unsigned NOT NULL DEFAULT '0',
+  `irc_channel` varchar(255) NOT NULL DEFAULT '',
+  `irc_channel_options` int(11) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`mangchat_id`,`wow_channel`,`irc_channel`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*Table structure for table `realm_classes` */
 
 DROP TABLE IF EXISTS `realm_classes`;
@@ -105,6 +211,8 @@ CREATE TABLE `realm_classes` (
   `expansion` tinyint(4) NOT NULL COMMENT 'Expansion for class activation',
   PRIMARY KEY (`realmId`,`class`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+insert  into `realm_classes`(`realmId`,`class`,`expansion`) values (9,1,0),(9,2,0),(9,3,0),(9,4,0),(9,5,0),(9,6,2),(9,7,0),(9,8,0),(9,9,0),(9,10,4),(9,11,0);
 
 /*Table structure for table `realm_races` */
 
@@ -117,6 +225,8 @@ CREATE TABLE `realm_races` (
   PRIMARY KEY (`realmId`,`race`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+insert  into `realm_races`(`realmId`,`race`,`expansion`) values (9,1,0),(9,2,0),(9,3,0),(9,4,0),(9,5,0),(9,6,0),(9,7,0),(9,8,0),(9,9,3),(9,10,1),(9,11,1),(9,22,3),(9,24,4),(9,25,4),(9,26,4);
+
 /*Table structure for table `realmcharacters` */
 
 DROP TABLE IF EXISTS `realmcharacters`;
@@ -128,6 +238,14 @@ CREATE TABLE `realmcharacters` (
   PRIMARY KEY (`realmid`,`acctid`),
   KEY `acctid` (`acctid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Realm Character Tracker';
+
+/*Table structure for table `realmd_db_version` */
+
+DROP TABLE IF EXISTS `realmd_db_version`;
+
+CREATE TABLE `realmd_db_version` (
+  `required_s1706_xxxxx_01_realmd_warden_data_result` bit(1) DEFAULT NULL
+) ENGINE=MyISAM DEFAULT CHARSET=utf8 ROW_FORMAT=FIXED COMMENT='Last applied sql update to DB';
 
 /*Table structure for table `realmlist` */
 
@@ -164,3 +282,56 @@ CREATE TABLE `uptime` (
   `revision` varchar(255) NOT NULL DEFAULT 'NA',
   PRIMARY KEY (`realmid`,`starttime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Uptime system';
+
+/*Table structure for table `warden_data_result` */
+
+DROP TABLE IF EXISTS `warden_data_result`;
+
+CREATE TABLE `warden_data_result` (
+  `check` int(3) DEFAULT NULL,
+  `data` tinytext,
+  `str` tinytext,
+  `address` int(8) DEFAULT NULL,
+  `length` int(2) DEFAULT NULL,
+  `result` tinytext,
+  `comment` text
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+/* Trigger structure for table `account_access` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `negative_insert` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'admin'@'%' */ /*!50003 TRIGGER `negative_insert` BEFORE INSERT ON `account_access` FOR EACH ROW BEGIN
+    DECLARE msg VARCHAR(255);
+IF NEW.`RealmID` < 0 THEN
+        set msg = "Error: You cannot use -1 for RealmID. This is a Security Risk.";
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = msg;
+END IF;
+END */$$
+
+
+DELIMITER ;
+
+/* Trigger structure for table `account_access` */
+
+DELIMITER $$
+
+/*!50003 DROP TRIGGER*//*!50032 IF EXISTS */ /*!50003 `negative_update` */$$
+
+/*!50003 CREATE */ /*!50017 DEFINER = 'admin'@'%' */ /*!50003 TRIGGER `negative_update` BEFORE UPDATE ON `account_access` FOR EACH ROW BEGIN
+    DECLARE msg VARCHAR(255);
+IF NEW.`RealmID` < 0 THEN
+        set msg = "Error: You cannot use -1 for RealmID. This is a Security Risk.";
+        SIGNAL SQLSTATE '45000' SET MESSAGE_TEXT = msg;
+END IF;
+END */$$
+
+
+DELIMITER ;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
